@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>World Environment Day: Recycle Sorter</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; margin: 20px; }
+    #game { display: flex; justify-content: space-around; margin-top: 30px; }
+    .bin, .item { border: 2px solid #555; padding: 10px; width: 120px; height: 120px; }
+    .bin { background: #f0f0f0; }
+    .item { background: #fff; margin: 10px; cursor: grab; }
+  </style>
+</head>
+<body>
+  <h1>Recycle Sorter</h1>
+  <p>Drag each item into the correct bin! ♻️</p>
+  <div id="game">
+    <div class="bins">
+      <div id="recycle" class="bin" ondrop="drop(event)" ondragover="allow(event)">Recycle</div>
+      <div id="compost" class="bin" ondrop="drop(event)" ondragover="allow(event)">Compost</div>
+      <div id="trash" class="bin" ondrop="drop(event)" ondragover="allow(event)">Trash</div>
+    </div>
+    <div class="items">
+      <div id="item1" class="item" draggable="true" ondragstart="drag(event)" data-bin="recycle">Plastic Bottle</div>
+      <div id="item2" class="item" draggable="true" ondragstart="drag(event)" data-bin="compost">Banana Peel</div>
+      <div id="item3" class="item" draggable="true" ondragstart="drag(event)" data-bin="trash">Chip Bag</div>
+    </div>
+  </div>
+  <h3 id="status"></h3>
+
+  <script>
+    let score = 0, total = 3;
+    function allow(ev) { ev.preventDefault(); }
+    function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
+    function drop(ev) {
+      ev.preventDefault();
+      const id = ev.dataTransfer.getData("text");
+      const item = document.getElementById(id);
+      const targetBin = ev.target.id;
+      const correctBin = item.getAttribute("data-bin");
+      if (targetBin === correctBin) {
+        ev.target.appendChild(item);
+        score++;
+        document.getElementById('status').innerText = `Nice! ${score}/${total}`;
+      } else {
+        document.getElementById('status').innerText = `Oops, wrong bin. ${score}/${total}`;
+      }
+      if (score === total) {
+        document.getElementById('status').innerText = "🏆 You did it! Happy World Environment Day!";
+      }
+    }
+  </script>
+</body>
+</html>
